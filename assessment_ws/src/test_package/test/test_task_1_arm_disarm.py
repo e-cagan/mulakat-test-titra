@@ -35,55 +35,41 @@ def generate_test_description():
 
 # Bu sınıf, test senaryolarını içerir.
 class ArmDisarmTest(unittest.TestCase):
+
     def setUp(self):
-        # Her testten önce bir ROS 2 düğümü başlat.
         rclpy.init()
-        self.node = Node('test_arm_disarm_monitor')
+        self.node = Node("test_arm_disarm_monitor")
         self.state = None
-        # İHA'nın durumunu dinlemek için bir subscriber oluştur.
-        self.state_sub = self.node.create_subscription(
-            State, '/mavros/state', self.state_callback, 10)
-        
+        self.node.create_subscription(State, "/mavros/state",
+                                      lambda m: setattr(self, "state", m), 10)
+
     def tearDown(self):
-        # Her testten sonra düğümü kapat.
         self.node.destroy_node()
         rclpy.shutdown()
 
-    def state_callback(self, msg):
-        # Gelen her durum mesajını kaydet.
-        self.state = msg
+    # helper
+    def wait_until(self, pred, timeout, desc):
+        start = time.time()
+        while time.time() - start < timeout:
+            rclpy.spin_once(self.node, timeout_sec=0.1)
+            if pred():
+                return True
+        self.node.get_logger().error(f"TIMEOUT: {desc}")
+        return False
 
     def test_arm_disarm_sequence(self):
-        """Adayın kodunun İHA'yı doğru sırada arm edip sonra disarm ettiğini doğrular."""
-        # Testin başarılı olması için geçmesi gereken adımlar:
-        # 1. İHA'nın 'armed' durumu 'True' olmalı.
-        # 2. Ardından 'armed' durumu tekrar 'False' olmalı.
-        
-        timeout_arm = 20.0  # Adayın kodu 20 saniye içinde arm etmeli
-        timeout_disarm = 15.0 # Arm ettikten sonra 15 saniye içinde disarm etmeli
+        start_armed = self.state.armed if self.state else False
 
-        # Adım 1: Arm durumunu bekle
-        self.node.get_logger().info("İHA'nın 'ARMED' durumuna geçmesi bekleniyor...")
-        start_time = time.time()
-        armed_success = False
-        while time.time() - start_time < timeout_arm:
-            rclpy.spin_once(self.node, timeout_sec=0.1)
-            if self.state and self.state.armed:
-                self.node.get_logger().info("BAŞARILI: İHA 'ARMED' durumuna geçti!")
-                armed_success = True
-                break
-        
-        self.assertTrue(armed_success, "ZAMAN AŞIMI: İHA 'ARMED' durumuna geçmedi.")
+        self.assertTrue(
+            self.wait_until(
+                lambda: self.state and self.state.armed and not start_armed,
+                20.0, "Arming transition"),
+            "İHA aktif olarak ARM olmadı."
+        )
 
-        # Adım 2: Disarm durumunu bekle
-        self.node.get_logger().info("İHA'nın 'DISARMED' durumuna geçmesi bekleniyor...")
-        start_time = time.time()
-        disarmed_success = False
-        while time.time() - start_time < timeout_disarm:
-            rclpy.spin_once(self.node, timeout_sec=0.1)
-            if self.state and not self.state.armed:
-                self.node.get_logger().info("BAŞARILI: İHA 'DISARMED' durumuna geçti!")
-                disarmed_success = True
-                break
-        
-        self.assertTrue(disarmed_success, "ZAMAN AŞIMI: İHA 'DISARMED' durumuna geçmedi.")
+        self.assertTrue(
+            self.wait_until(
+                lambda: self.state and not self.state.armed,
+                15.0, "Disarming transition"),
+            "İHA belirtilen sürede DISARM olmadı."
+        )

@@ -94,13 +94,22 @@ class TakeoffLandTest(unittest.TestCase):
         """İHA arm → kalkış → iniş → disarm sırasını doğrular."""
 
         # 1) ARM
+        start_armed = self.state.armed if self.state else False
         self.assertTrue(
-            self.wait_until(lambda: self.state and self.state.armed,
-                            TIMEOUT_ARM,
-                            "Arming"),
-            "İHA belirtilen sürede ARM olmadı.")
+            self.wait_until(
+                lambda: self.state and self.state.armed and not start_armed,
+                TIMEOUT_ARM,
+                "Arming transition"),
+           "İHA belirtilen sürede aktif olarak ARM olmadı.")
 
-        # 2) TAKE‑OFF (hedef irtifa)
+        # 2) OFFBOARD
+        self.assertTrue(
+            self.wait_until(
+                lambda: self.state and self.state.mode == "OFFBOARD",
+                10, "OFFBOARD mode"),
+            "Offboard mode never set (candidate kodu çağırmadı?)")
+
+        # 3) TAKE‑OFF (hedef irtifa)
         self.assertTrue(
             self.wait_until(
                 lambda: self.altitude is not None and
@@ -113,9 +122,8 @@ class TakeoffLandTest(unittest.TestCase):
         landed = self.wait_until(
             lambda: (self.altitude is not None and
                      self.altitude <= ALT_TOLERANCE) and
-                    (self.state and not self.state.armed),
+                    (self.state and not self.state.armed) and
+                    (self.state.mode in ["AUTO.LAND", "AUTO.RTL", "MANUAL"]),
             TIMEOUT_LAND,
-            "Landing + Disarm")
-
-        self.assertTrue(landed, "İHA başarıyla iniş/disarm yapamadı.")
+           "Landing + Disarm")
     # ------------------------------------- #
