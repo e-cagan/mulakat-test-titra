@@ -11,7 +11,12 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+    'setuptools',
+    'rclpy',
+    'mavros_msgs',
+    'geometry_msgs'
+    ],
     zip_safe=True,
     maintainer='Adınız Soyadınız',
     maintainer_email='sizin.email@adresiniz.com',

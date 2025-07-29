@@ -25,6 +25,9 @@ def main(args=None):
             flight_controller.task_2_takeoff_and_land()
         else:
             flight_controller.get_logger().error(f"Bilinmeyen görev: {task_name}")
+
+        # Flight controllerı başlat
+        rclpy.spin(flight_controller)
     finally:
         # Her durumda düğümleri kapat ve rclpy'ı sonlandır
         if 'flight_controller' in locals() and flight_controller.executor:
