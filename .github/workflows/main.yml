@@ -45,11 +45,11 @@ jobs:
 
       # Buraya Görev 2 (Kalkış/İniş) için testler eklenebilir.
       # Önce 'test_task_2_takeoff_land.py' adında bir test dosyası oluşturmanız gerekir.
-      # - name: Run Task 2 Test - Takeoff/Land
-      #   id: task2
-      #   continue-on-error: true
-      #   run: |
-      #     docker run --rm -t uav-assessment-env bash -c "source /root/ros2_ws/install/setup.bash && colcon test --packages-select test_package --ctest-args '-R test_task_2_takeoff_land'"
+      - name: Run Task 2 Test - Takeoff/Land
+        id: task2
+        continue-on-error: true
+        run: |
+          docker run --rm -t uav-assessment-env bash -c "source /root/ros2_ws/install/setup.bash && colcon test --packages-select test_package --ctest-args '-R test_task_2_takeoff_land'"
 
       # 4. Adım: Değerlendirme Raporunu Oluşturma (✅/❌ Kısmı)
       - name: Generate Assessment Report
@@ -66,9 +66,9 @@ jobs:
           fi
 
           # Görev 2 aktif edildiğinde bu kısım da açılmalı
-          # if [[ "${{ steps.task2.outcome }}" == "success" ]]; then
-          #   echo "### ✅ Görev 2: Otonom Kalkış ve İniş Başarılı" >> $GITHUB_STEP_SUMMARY
-          # else
-          #   echo "### ❌ Görev 2: Otonom Kalkış ve İniş Başarısız" >> $GITHUB_STEP_SUMMARY
-          #   echo "**Detaylar:** 'Run Task 2 Test' adımının loglarını inceleyin." >> $GITHUB_STEP_SUMMARY
-          # fi
+          if [[ "${{ steps.task2.outcome }}" == "success" ]]; then
+            echo "### ✅ Görev 2: Otonom Kalkış ve İniş Başarılı" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ❌ Görev 2: Otonom Kalkış ve İniş Başarısız" >> $GITHUB_STEP_SUMMARY
+            echo "**Detaylar:** 'Run Task 2 Test' adımının loglarını inceleyin." >> $GITHUB_STEP_SUMMARY
+          fi
