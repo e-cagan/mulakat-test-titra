@@ -1,6 +1,6 @@
 import rclpy
 import sys
-from mavros_interface.node import MavrosInterface
+from mavros_interface.mavros_interface.node import MavrosInterface
 from candidate_package.flight_logic import FlightController
 
 def main(args=None):
