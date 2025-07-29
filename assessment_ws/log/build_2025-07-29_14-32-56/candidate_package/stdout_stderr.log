@@ -1,0 +1,17 @@
+running develop
+running egg_info
+creating candidate_package.egg-info
+writing candidate_package.egg-info/PKG-INFO
+writing dependency_links to candidate_package.egg-info/dependency_links.txt
+writing entry points to candidate_package.egg-info/entry_points.txt
+writing requirements to candidate_package.egg-info/requires.txt
+writing top-level names to candidate_package.egg-info/top_level.txt
+writing manifest file 'candidate_package.egg-info/SOURCES.txt'
+reading manifest file 'candidate_package.egg-info/SOURCES.txt'
+writing manifest file 'candidate_package.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/cagan/mulakat-test-titra/assessment_ws/install/candidate_package/lib/python3.10/site-packages/candidate-package.egg-link (link to .)
+Installing run_task script to /home/cagan/mulakat-test-titra/assessment_ws/install/candidate_package/lib/candidate_package
+
+Installed /home/cagan/mulakat-test-titra/assessment_ws/build/candidate_package
+running symlink_data
