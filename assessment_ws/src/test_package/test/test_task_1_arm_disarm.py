@@ -10,6 +10,7 @@ from launch.actions import ExecuteProcess, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 import launch_testing
 import launch_testing.actions
+import launch_testing.markers
 from ament_index_python.packages import get_package_share_directory
 
 # Test edilecek görevi belirle. Bu, adayın main.py'sine argüman olarak gidecek.
