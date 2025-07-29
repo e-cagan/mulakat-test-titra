@@ -1,0 +1,74 @@
+name: UAV Assessment CI
+
+# Bu iş akışı ne zaman tetiklenecek?
+# - main branch'ine bir push yapıldığında
+# - Manuel olarak "Run workflow" butonuna tıklandığında
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  # 'test' adında tek bir işimiz var
+  test:
+    # En güncel Ubuntu sunucusunda çalışacak
+    runs-on: ubuntu-latest
+    name: Run Simulation Tests
+
+    steps:
+      # 1. Adım: Adayın kodunu sunucuya indirir
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Adım: Docker'ı kurar ve hazırlar
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. Adım: Docker imajını oluşturur (daha önce saatlerce uğraştığımız Dockerfile'ı kullanarak)
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          tags: uav-assessment-env:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # --- Testleri Ayrı Ayrı Çalıştırma ---
+      # Her görev için testi ayrı bir adımda çalıştırıyoruz ki sonuçları ayrı raporlayabilelim.
+      
+      - name: Run Task 1 Test - Arm/Disarm
+        id: task1
+        continue-on-error: true # Bu adım başarısız olsa bile iş akışı durmasın
+        run: |
+          docker run --rm -t uav-assessment-env bash -c "source /root/ros2_ws/install/setup.bash && colcon test --packages-select test_package --ctest-args '-R test_task_1_arm_disarm'"
+
+      # Buraya Görev 2 (Kalkış/İniş) için testler eklenebilir.
+      # Önce 'test_task_2_takeoff_land.py' adında bir test dosyası oluşturmanız gerekir.
+      # - name: Run Task 2 Test - Takeoff/Land
+      #   id: task2
+      #   continue-on-error: true
+      #   run: |
+      #     docker run --rm -t uav-assessment-env bash -c "source /root/ros2_ws/install/setup.bash && colcon test --packages-select test_package --ctest-args '-R test_task_2_takeoff_land'"
+
+      # 4. Adım: Değerlendirme Raporunu Oluşturma (✅/❌ Kısmı)
+      - name: Generate Assessment Report
+        if: always() # Bu adım, testler başarısız olsa bile her zaman çalışır
+        run: |
+          echo "## 📝 Aday Değerlendirme Raporu" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ steps.task1.outcome }}" == "success" ]]; then
+            echo "### ✅ Görev 1: Arm ve Disarm Başarılı" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ❌ Görev 1: Arm ve Disarm Başarısız" >> $GITHUB_STEP_SUMMARY
+            echo "**Detaylar:** 'Run Task 1 Test' adımının loglarını inceleyin." >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Görev 2 aktif edildiğinde bu kısım da açılmalı
+          # if [[ "${{ steps.task2.outcome }}" == "success" ]]; then
+          #   echo "### ✅ Görev 2: Otonom Kalkış ve İniş Başarılı" >> $GITHUB_STEP_SUMMARY
+          # else
+          #   echo "### ❌ Görev 2: Otonom Kalkış ve İniş Başarısız" >> $GITHUB_STEP_SUMMARY
+          #   echo "**Detaylar:** 'Run Task 2 Test' adımının loglarını inceleyin." >> $GITHUB_STEP_SUMMARY
+          # fi

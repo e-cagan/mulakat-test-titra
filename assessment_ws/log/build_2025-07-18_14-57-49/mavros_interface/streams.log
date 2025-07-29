@@ -1,0 +1,36 @@
+[0.647s] Invoking command in '/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/src/mavros_interface': PYTHONPATH=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/mavros_interface build --build-base /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/build install --record /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/install.log --single-version-externally-managed install_data
+[0.889s] running egg_info
+[0.890s] creating ../../build/mavros_interface/mavros_interface.egg-info
+[0.890s] writing ../../build/mavros_interface/mavros_interface.egg-info/PKG-INFO
+[0.890s] writing dependency_links to ../../build/mavros_interface/mavros_interface.egg-info/dependency_links.txt
+[0.891s] writing entry points to ../../build/mavros_interface/mavros_interface.egg-info/entry_points.txt
+[0.891s] writing requirements to ../../build/mavros_interface/mavros_interface.egg-info/requires.txt
+[0.891s] writing top-level names to ../../build/mavros_interface/mavros_interface.egg-info/top_level.txt
+[0.891s] writing manifest file '../../build/mavros_interface/mavros_interface.egg-info/SOURCES.txt'
+[0.892s] reading manifest file '../../build/mavros_interface/mavros_interface.egg-info/SOURCES.txt'
+[0.893s] writing manifest file '../../build/mavros_interface/mavros_interface.egg-info/SOURCES.txt'
+[0.893s] running build
+[0.893s] running build_py
+[0.894s] creating /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/build
+[0.894s] creating /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/build/lib
+[0.894s] creating /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/build/lib/mavros_interface
+[0.894s] copying mavros_interface/__init__.py -> /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/build/lib/mavros_interface
+[0.894s] copying mavros_interface/node.py -> /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/build/lib/mavros_interface
+[0.894s] running install
+[0.894s] running install_lib
+[0.895s] creating /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages/mavros_interface
+[0.895s] copying /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/build/lib/mavros_interface/__init__.py -> /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages/mavros_interface
+[0.895s] copying /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/build/lib/mavros_interface/node.py -> /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages/mavros_interface
+[0.896s] byte-compiling /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages/mavros_interface/__init__.py to __init__.cpython-310.pyc
+[0.896s] byte-compiling /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages/mavros_interface/node.py to node.cpython-310.pyc
+[0.897s] running install_data
+[0.897s] creating /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/share/ament_index
+[0.897s] creating /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/share/ament_index/resource_index
+[0.897s] creating /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/share/ament_index/resource_index/packages
+[0.897s] copying resource/mavros_interface -> /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/share/ament_index/resource_index/packages
+[0.897s] copying package.xml -> /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/share/mavros_interface
+[0.897s] running install_egg_info
+[0.899s] Copying ../../build/mavros_interface/mavros_interface.egg-info to /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages/mavros_interface-0.0.1-py3.10.egg-info
+[0.900s] running install_scripts
+[0.919s] writing list of installed files to '/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/install.log'
+[0.949s] Invoked command in '/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/src/mavros_interface' returned '0': PYTHONPATH=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/mavros_interface build --build-base /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/build install --record /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/mavros_interface/install.log --single-version-externally-managed install_data

@@ -1,0 +1,49 @@
+[0.273s] Invoking command in '/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/src/test_package': AMENT_PREFIX_PATH=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/test_package:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/candidate_package:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface:${AMENT_PREFIX_PATH} PYTEST_ADDOPTS=--tb=short --junit-xml=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/test_package/pytest.xml --junit-prefix=test_package -o cache_dir=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/test_package/.pytest_cache PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/test_package/lib/python3.10/site-packages:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/candidate_package/lib/python3.10/site-packages:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -m pytest
+[0.703s] [1m============================= test session starts ==============================[0m
+[0.703s] platform linux -- Python 3.10.12, pytest-6.2.5, py-1.10.0, pluggy-0.13.0
+[0.709s] cachedir: /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/test_package/.pytest_cache
+[0.709s] rootdir: /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/src/test_package
+[0.709s] plugins: launch-testing-ros-0.19.9, launch-testing-1.0.9, ament-pep257-0.12.12, ament-flake8-0.12.12, ament-xmllint-0.12.12, ament-copyright-0.12.12, ament-lint-0.12.12, colcon-core-0.19.0, cov-3.0.0
+[1.364s] [1mcollecting ... [0m[1m
+[1.373s] collecting 0 items / 1 error                                                   [0m[1m
+[1.373s] collected 0 items / 1 error                                                    [0m
+[1.408s] 
+[1.408s] ==================================== ERRORS ====================================
+[1.408s] [31m[1m________________________ ERROR collecting test session _________________________[0m
+[1.408s] [1m[31m/usr/lib/python3/dist-packages/pluggy/hooks.py[0m:286: in __call__
+[1.455s]     [94mreturn[39;49;00m [96mself[39;49;00m._hookexec([96mself[39;49;00m, [96mself[39;49;00m.get_hookimpls(), kwargs)
+[1.455s] [1m[31m/usr/lib/python3/dist-packages/pluggy/manager.py[0m:92: in _hookexec
+[1.455s]     [94mreturn[39;49;00m [96mself[39;49;00m._inner_hookexec(hook, methods, kwargs)
+[1.455s] [1m[31m/usr/lib/python3/dist-packages/pluggy/manager.py[0m:83: in <lambda>
+[1.456s]     [96mself[39;49;00m._inner_hookexec = [94mlambda[39;49;00m hook, methods, kwargs: hook.multicall(
+[1.456s] [1m[31m/usr/lib/python3/dist-packages/_pytest/python.py[0m:200: in pytest_collect_file
+[1.456s]     module: Module = ihook.pytest_pycollect_makemodule(path=path, parent=parent)
+[1.456s] [1m[31m/usr/lib/python3/dist-packages/pluggy/hooks.py[0m:286: in __call__
+[1.456s]     [94mreturn[39;49;00m [96mself[39;49;00m._hookexec([96mself[39;49;00m, [96mself[39;49;00m.get_hookimpls(), kwargs)
+[1.456s] [1m[31m/usr/lib/python3/dist-packages/pluggy/manager.py[0m:92: in _hookexec
+[1.456s]     [94mreturn[39;49;00m [96mself[39;49;00m._inner_hookexec(hook, methods, kwargs)
+[1.456s] [1m[31m/usr/lib/python3/dist-packages/pluggy/manager.py[0m:83: in <lambda>
+[1.456s]     [96mself[39;49;00m._inner_hookexec = [94mlambda[39;49;00m hook, methods, kwargs: hook.multicall(
+[1.457s] [1m[31m/opt/ros/humble/lib/python3.10/site-packages/launch_testing/pytest/hooks.py[0m:193: in pytest_pycollect_makemodule
+[1.457s]     entrypoint = find_launch_test_entrypoint(path)
+[1.457s] [1m[31m/opt/ros/humble/lib/python3.10/site-packages/launch_testing/pytest/hooks.py[0m:186: in find_launch_test_entrypoint
+[1.457s]     module = path.pyimport()
+[1.457s] [1m[31m/usr/lib/python3/dist-packages/py/_path/local.py[0m:704: in pyimport
+[1.457s]     [96m__import__[39;49;00m(modname)
+[1.457s] [1m[31m<frozen importlib._bootstrap>[0m:1027: in _find_and_load
+[1.457s]     [04m[91m?[39;49;00m[04m[91m?[39;49;00m[04m[91m?[39;49;00m
+[1.457s] [1m[31m<frozen importlib._bootstrap>[0m:1006: in _find_and_load_unlocked
+[1.457s]     [04m[91m?[39;49;00m[04m[91m?[39;49;00m[04m[91m?[39;49;00m
+[1.457s] [1m[31m<frozen importlib._bootstrap>[0m:688: in _load_unlocked
+[1.457s]     [04m[91m?[39;49;00m[04m[91m?[39;49;00m[04m[91m?[39;49;00m
+[1.457s] [1m[31m/usr/lib/python3/dist-packages/_pytest/assertion/rewrite.py[0m:170: in exec_module
+[1.458s]     exec(co, module.[91m__dict__[39;49;00m)
+[1.458s] [1m[31mtest/test_task_1_arm_disarm.py[0m:18: in <module>
+[1.458s]     [37m@launch_testing[39;49;00m.markers.keep_alive
+[1.458s] [1m[31mE   AttributeError: module 'launch_testing' has no attribute 'markers'[0m
+[1.458s] - generated xml file: /home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/test_package/pytest.xml -
+[1.458s] =========================== short test summary info ============================
+[1.458s] ERROR  - AttributeError: module 'launch_testing' has no attribute 'markers'
+[1.458s] !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+[1.458s] [31m=============================== [31m[1m1 error[0m[31m in 0.75s[0m[31m ===============================[0m
+[1.581s] Invoked command in '/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/src/test_package' returned '2': AMENT_PREFIX_PATH=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/test_package:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/candidate_package:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface:${AMENT_PREFIX_PATH} PYTEST_ADDOPTS=--tb=short --junit-xml=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/test_package/pytest.xml --junit-prefix=test_package -o cache_dir=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/build/test_package/.pytest_cache PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/test_package/lib/python3.10/site-packages:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/candidate_package/lib/python3.10/site-packages:/home/stajyer-pc/UAV-Assessment-Template/assessment_ws/install/mavros_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -m pytest
