@@ -24,8 +24,6 @@ import launch_testing
 import launch_testing.actions
 import launch_testing.markers
 
-raise RuntimeError("Test dosyası gerçekten güncellendi mi?")
-
 # ------------ Parametreler ------------
 TASK_NAME          = "task2"          # candidate_package arg
 TARGET_ALT         = float(os.getenv("TARGET_ALT", 2.0))   # metre

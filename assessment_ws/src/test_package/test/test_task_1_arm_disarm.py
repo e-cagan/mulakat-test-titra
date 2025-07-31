@@ -13,8 +13,6 @@ import launch_testing.actions
 import launch_testing.markers
 from ament_index_python.packages import get_package_share_directory
 
-raise RuntimeError("Test dosyası gerçekten güncellendi mi?")
-
 # Test edilecek görevi belirle. Bu, adayın main.py'sine argüman olarak gidecek.
 TASK_NAME = 'task1'
 

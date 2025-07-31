@@ -48,7 +48,7 @@ RUN source /opt/ros/humble/setup.bash && \
     rosdep install --from-paths src -y --ignore-src
 
 # Çalışma alanını derle (artık px4_ros_com da derlenecek)
-RUN source /opt/ros/humble/setup.bash && colcon build
+RUN source /opt/ros/humble/setup.bash
 
 # Container başladığında bash'i çalıştır ve ROS ortamını hazırla
 CMD ["/bin/bash"]

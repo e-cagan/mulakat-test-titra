@@ -1,0 +1,25 @@
+[0.599s] Invoking command in '/home/cagan/mulakat-test-titra/build/test_package': AMENT_PREFIX_PATH=/home/cagan/mulakat-test-titra/install/candidate_package:/home/cagan/mulakat-test-titra/install/mavros_interface:${AMENT_PREFIX_PATH} PYTHONPATH=/home/cagan/mulakat-test-titra/build/test_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/cagan/mulakat-test-titra/install/test_package/lib/python3.10/site-packages:/home/cagan/mulakat-test-titra/build/candidate_package:/home/cagan/mulakat-test-titra/install/candidate_package/lib/python3.10/site-packages:/home/cagan/mulakat-test-titra/build/mavros_interface:/home/cagan/mulakat-test-titra/install/mavros_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/cagan/mulakat-test-titra/build/test_package/build --no-deps symlink_data
+[0.823s] running develop
+[0.937s] running egg_info
+[0.937s] creating test_package.egg-info
+[0.937s] writing test_package.egg-info/PKG-INFO
+[0.937s] writing dependency_links to test_package.egg-info/dependency_links.txt
+[0.937s] writing entry points to test_package.egg-info/entry_points.txt
+[0.937s] writing requirements to test_package.egg-info/requires.txt
+[0.937s] writing top-level names to test_package.egg-info/top_level.txt
+[0.938s] writing manifest file 'test_package.egg-info/SOURCES.txt'
+[0.939s] reading manifest file 'test_package.egg-info/SOURCES.txt'
+[0.939s] writing manifest file 'test_package.egg-info/SOURCES.txt'
+[0.940s] running build_ext
+[0.940s] Creating /home/cagan/mulakat-test-titra/install/test_package/lib/python3.10/site-packages/test-package.egg-link (link to .)
+[0.941s] 
+[0.941s] Installed /home/cagan/mulakat-test-titra/build/test_package
+[0.941s] running symlink_data
+[0.941s] creating /home/cagan/mulakat-test-titra/install/test_package/share/ament_index
+[0.941s] creating /home/cagan/mulakat-test-titra/install/test_package/share/ament_index/resource_index
+[0.941s] creating /home/cagan/mulakat-test-titra/install/test_package/share/ament_index/resource_index/packages
+[0.941s] symbolically linking /home/cagan/mulakat-test-titra/build/test_package/resource/test_package -> /home/cagan/mulakat-test-titra/install/test_package/share/ament_index/resource_index/packages
+[0.941s] symbolically linking /home/cagan/mulakat-test-titra/build/test_package/package.xml -> /home/cagan/mulakat-test-titra/install/test_package/share/test_package
+[0.942s] creating /home/cagan/mulakat-test-titra/install/test_package/share/test_package/launch
+[0.942s] symbolically linking /home/cagan/mulakat-test-titra/build/test_package/launch/base_sim.launch.py -> /home/cagan/mulakat-test-titra/install/test_package/share/test_package/launch
+[0.962s] Invoked command in '/home/cagan/mulakat-test-titra/build/test_package' returned '0': AMENT_PREFIX_PATH=/home/cagan/mulakat-test-titra/install/candidate_package:/home/cagan/mulakat-test-titra/install/mavros_interface:${AMENT_PREFIX_PATH} PYTHONPATH=/home/cagan/mulakat-test-titra/build/test_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/cagan/mulakat-test-titra/install/test_package/lib/python3.10/site-packages:/home/cagan/mulakat-test-titra/build/candidate_package:/home/cagan/mulakat-test-titra/install/candidate_package/lib/python3.10/site-packages:/home/cagan/mulakat-test-titra/build/mavros_interface:/home/cagan/mulakat-test-titra/install/mavros_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/cagan/mulakat-test-titra/build/test_package/build --no-deps symlink_data

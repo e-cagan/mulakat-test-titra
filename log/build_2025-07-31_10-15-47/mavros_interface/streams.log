@@ -1,0 +1,23 @@
+[0.433s] Invoking command in '/home/cagan/mulakat-test-titra/build/mavros_interface': PYTHONPATH=/home/cagan/mulakat-test-titra/build/mavros_interface/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/cagan/mulakat-test-titra/install/mavros_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/cagan/mulakat-test-titra/build/mavros_interface/build --no-deps symlink_data
+[0.610s] running develop
+[0.715s] running egg_info
+[0.715s] creating mavros_interface.egg-info
+[0.715s] writing mavros_interface.egg-info/PKG-INFO
+[0.715s] writing dependency_links to mavros_interface.egg-info/dependency_links.txt
+[0.715s] writing entry points to mavros_interface.egg-info/entry_points.txt
+[0.715s] writing requirements to mavros_interface.egg-info/requires.txt
+[0.715s] writing top-level names to mavros_interface.egg-info/top_level.txt
+[0.716s] writing manifest file 'mavros_interface.egg-info/SOURCES.txt'
+[0.717s] reading manifest file 'mavros_interface.egg-info/SOURCES.txt'
+[0.717s] writing manifest file 'mavros_interface.egg-info/SOURCES.txt'
+[0.719s] running build_ext
+[0.719s] Creating /home/cagan/mulakat-test-titra/install/mavros_interface/lib/python3.10/site-packages/mavros-interface.egg-link (link to .)
+[0.719s] 
+[0.719s] Installed /home/cagan/mulakat-test-titra/build/mavros_interface
+[0.719s] running symlink_data
+[0.719s] creating /home/cagan/mulakat-test-titra/install/mavros_interface/share/ament_index
+[0.719s] creating /home/cagan/mulakat-test-titra/install/mavros_interface/share/ament_index/resource_index
+[0.719s] creating /home/cagan/mulakat-test-titra/install/mavros_interface/share/ament_index/resource_index/packages
+[0.719s] symbolically linking /home/cagan/mulakat-test-titra/build/mavros_interface/resource/mavros_interface -> /home/cagan/mulakat-test-titra/install/mavros_interface/share/ament_index/resource_index/packages
+[0.719s] symbolically linking /home/cagan/mulakat-test-titra/build/mavros_interface/package.xml -> /home/cagan/mulakat-test-titra/install/mavros_interface/share/mavros_interface
+[0.741s] Invoked command in '/home/cagan/mulakat-test-titra/build/mavros_interface' returned '0': PYTHONPATH=/home/cagan/mulakat-test-titra/build/mavros_interface/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/cagan/mulakat-test-titra/install/mavros_interface/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/cagan/mulakat-test-titra/build/mavros_interface/build --no-deps symlink_data
