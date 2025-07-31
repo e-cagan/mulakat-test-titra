@@ -39,7 +39,7 @@ jobs:
       
       - name: Run Task 1 Test - Arm/Disarm
         id: task1
-        continue-on-error: true # Bu adım başarısız olsa bile iş akışı durmasın
+        continue-on-error: false # Bu adım başarısız olsa bile iş akışı durmasın
         run: |
           docker run --rm -t uav-assessment-env bash -c "source /root/ros2_ws/install/setup.bash && colcon test --packages-select test_package --ctest-args '-R test_task_1_arm_disarm'"
 
@@ -47,7 +47,7 @@ jobs:
       # Önce 'test_task_2_takeoff_land.py' adında bir test dosyası oluşturmanız gerekir.
       - name: Run Task 2 Test - Takeoff/Land
         id: task2
-        continue-on-error: true
+        continue-on-error: false
         run: |
           docker run --rm -t uav-assessment-env bash -c "source /root/ros2_ws/install/setup.bash && colcon test --packages-select test_package --ctest-args '-R test_task_2_takeoff_land'"
 
