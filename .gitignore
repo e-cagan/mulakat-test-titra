@@ -49,3 +49,6 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+/assessment_ws/build
+/assessment_ws/install
+/assessment_ws/log

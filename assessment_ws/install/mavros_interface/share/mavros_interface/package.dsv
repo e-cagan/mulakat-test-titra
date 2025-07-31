@@ -1,9 +1,0 @@
-source;share/mavros_interface/hook/pythonpath.ps1
-source;share/mavros_interface/hook/pythonpath.dsv
-source;share/mavros_interface/hook/pythonpath.sh
-source;share/mavros_interface/hook/ament_prefix_path.ps1
-source;share/mavros_interface/hook/ament_prefix_path.dsv
-source;share/mavros_interface/hook/ament_prefix_path.sh
-source;../../build/mavros_interface/share/mavros_interface/hook/pythonpath_develop.ps1
-source;../../build/mavros_interface/share/mavros_interface/hook/pythonpath_develop.dsv
-source;../../build/mavros_interface/share/mavros_interface/hook/pythonpath_develop.sh
