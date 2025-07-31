@@ -33,7 +33,7 @@ RUN make px4_sitl
 
 # ROS 2 çalışma alanını kopyala
 WORKDIR /root/ros2_ws
-COPY assessment_ws/ /root/ros2_ws/src/
+COPY src/ /root/ros2_ws/src/
 
 # PX4-ROS köprü paketlerini kaynak kodundan indir.
 WORKDIR /root/ros2_ws/src
