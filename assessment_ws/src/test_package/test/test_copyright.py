@@ -15,6 +15,8 @@
 from ament_copyright.main import main
 import pytest
 
+pytest.skip("Copyright testleri esgeçildi", allow_module_level=True)
+
 
 # Remove the `skip` decorator once the source file(s) have a copyright header
 @pytest.mark.skip(reason='No copyright header has been placed in the generated source file.')

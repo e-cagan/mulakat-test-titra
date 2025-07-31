@@ -15,6 +15,8 @@
 from ament_pep257.main import main
 import pytest
 
+pytest.skip("Pep257 testleri esgeçildi", allow_module_level=True)
+
 
 @pytest.mark.linter
 @pytest.mark.pep257

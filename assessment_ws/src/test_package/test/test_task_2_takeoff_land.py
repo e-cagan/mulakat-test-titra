@@ -25,12 +25,12 @@ import launch_testing.actions
 import launch_testing.markers
 
 # ------------ Parametreler ------------
-TASK_NAME          = "task2"          # candidate_package arg
-TARGET_ALT         = float(os.getenv("TARGET_ALT", 2.0))   # metre
-ALT_TOLERANCE      = 0.3              # ± 0.3 m kabul
-TIMEOUT_ARM        = 20.0             # s
-TIMEOUT_TAKEOFF    = 30.0             # s
-TIMEOUT_LAND       = 30.0             # s
+TASK_NAME = "task2"          # candidate_package arg
+TARGET_ALT = float(os.getenv("TARGET_ALT", 2.0))   # metre
+ALT_TOLERANCE = 0.3              # ± 0.3 m kabul
+TIMEOUT_ARM = 20.0             # s
+TIMEOUT_TAKEOFF = 30.0             # s
+TIMEOUT_LAND = 30.0             # s
 # --------------------------------------
 
 
@@ -99,15 +99,13 @@ class TakeoffLandTest(unittest.TestCase):
             self.wait_until(
                 lambda: self.state and self.state.armed and not start_armed,
                 TIMEOUT_ARM,
-                "Arming transition"),
-           "İHA belirtilen sürede aktif olarak ARM olmadı.")
+                "Arming transition"),"İHA belirtilen sürede aktif olarak ARM olmadı.")
 
         # 2) OFFBOARD
         self.assertTrue(
             self.wait_until(
                 lambda: self.state and self.state.mode == "OFFBOARD",
-                10, "OFFBOARD mode"),
-            "Offboard mode never set (candidate kodu çağırmadı?)")
+                10, "OFFBOARD mode"),"Offboard mode never set (candidate kodu çağırmadı?)")
 
         # 3) TAKE‑OFF (hedef irtifa)
         self.assertTrue(
