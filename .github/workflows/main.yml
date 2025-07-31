@@ -37,15 +37,16 @@ jobs:
       id: task1
       run: |
         docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -euo pipefail
+          set -eo pipefail                     #  ←  u’yu çıkardık
           source /opt/ros/humble/setup.bash
+          set -u                               #  ←  istersen geri aç
           cd /root/ros2_ws
           rm -rf build install log
           colcon build --symlink-install
           colcon test --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --ctest-args "-R test_task_1_arm_disarm -VV" \
-                       --return-code-on-test-failure
+                      --event-handlers console_direct+ \
+                      --ctest-args "-R test_task_1_arm_disarm -VV" \
+                      --return-code-on-test-failure
           colcon test-result --verbose --fail
         '
 
@@ -54,15 +55,16 @@ jobs:
       id: task2
       run: |
         docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -euo pipefail
+          set -eo pipefail                     #  ←  u’yu çıkardık
           source /opt/ros/humble/setup.bash
+          set -u                               #  ←  istersen geri aç
           cd /root/ros2_ws
           rm -rf build install log
           colcon build --symlink-install
           colcon test --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --ctest-args "-R test_task_2_takeoff_land -VV" \
-                       --return-code-on-test-failure
+                      --event-handlers console_direct+ \
+                      --ctest-args "-R test_task_2_takeoff_land -VV" \
+                      --return-code-on-test-failure
           colcon test-result --verbose --fail
         '
 
