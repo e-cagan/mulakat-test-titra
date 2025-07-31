@@ -45,7 +45,6 @@ jobs:
           colcon build --symlink-install
           colcon test --packages-select test_package \
                       --event-handlers console_direct+ \
-                      --ctest-args "-R test_task_1_arm_disarm -VV" \
                       --return-code-on-test-failure
           colcon test-result --verbose
         '
@@ -63,7 +62,6 @@ jobs:
           colcon build --symlink-install
           colcon test --packages-select test_package \
                       --event-handlers console_direct+ \
-                      --ctest-args "-R test_task_2_takeoff_land -VV" \
                       --return-code-on-test-failure
           colcon test-result --verbose
         '
