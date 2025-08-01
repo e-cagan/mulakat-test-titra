@@ -31,6 +31,9 @@ RUN git clone https://github.com/PX4/px4_msgs.git
 # **rosdep** adımını atlıyoruz (zaten container çalışırken colcon build yapacağız)
 # Böylece test_package’ın pytest’i çözümlemeye çalışması engellenmiş oldu.
 RUN apt-get update && \
-    apt-get install -y ros-humble-launch-testing ros-humble-launch-testing-ros
+    apt-get install -y --no-install-recommends \
+      ros-humble-launch-testing \
+      ros-humble-launch-testing-ros && \
+    rm -rf /var/lib/apt/lists/*
 
 CMD ["/bin/bash"]
