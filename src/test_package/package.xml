@@ -3,7 +3,7 @@
   <name>test_package</name>
   <version>0.0.1</version>
   <description>Aday kodunu doğrulayan simülasyon test paketi.</description>
-  <maintainer email="…">Beyza Beril</maintainer>
+  <maintainer email="emincaganapaydin@gmail.com">Emin Çağan Apaydın</maintainer>
   <license>Apache-2.0</license>
 
   <!-- normal runtime bağımlılıklar -->
