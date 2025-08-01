@@ -1,24 +1,18 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>test_package</name>
-  <version>0.0.1</version>
-  <description>Aday kodunu doğrulayan simülasyon test paketi.</description>
-  <maintainer email="emincaganapaydin@gmail.com">Emin Çağan Apaydın</maintainer>
-  <license>Apache-2.0</license>
+  <name>mulakat_test_titra</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="cagan@todo.todo">cagan</maintainer>
+  <license>TODO: License declaration</license>
 
-  <!-- normal runtime bağımlılıklar -->
-  <depend>rclpy</depend>
-  <depend>candidate_package</depend>
-  <depend>mavros_interface</depend>
-  <!-- test zamanında gerekli -->
-  <depend>launch_testing</depend>
-  <depend>launch_testing_ros</depend>
-  <depend>pytest</depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  
   <test_depend>launch_testing</test_depend>
-  <test_depend>launch_testing_ros</test_depend>
-
   <export>
-    <build_type>ament_python</build_type>
+    <build_type>ament_cmake</build_type>
   </export>
 </package>
