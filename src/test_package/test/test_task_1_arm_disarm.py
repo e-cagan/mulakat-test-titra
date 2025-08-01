@@ -1,75 +1,93 @@
+"""
+Görev 1 – Arm ➜ Disarm Kenar Testi.
+
+PX4 SITL + MAVROS ➜ candidate node ‘task1’ çağrısı
+1) ARM    2) 5 s    3) DISARM  
+Kenarlar ≤ 20 s içinde gözlenmeli.
+"""
+
 import os
-import unittest
-import rclpy
 import time
+import unittest
+from pathlib import Path
+
+import rclpy
 from rclpy.node import Node
 from mavros_msgs.msg import State
+
+from ament_index_python.packages import (
+    get_package_share_directory,
+    PackageNotFoundError,          #  ← ekle
+)
 
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-import launch_testing
-import launch_testing.actions
-import launch_testing.markers
-from ament_index_python.packages import get_package_share_directory
+from launch_testing.markers import keep_alive
+import launch_testing_ros
 
-# Test edilecek görevi belirle. Bu, adayın main.py'sine argüman olarak gidecek.
-TASK_NAME = 'task1'
+ARM_TIMEOUT = float(os.getenv("ARM_TIMEOUT", "20.0"))
 
-@launch_testing.markers.keep_alive
-def generate_test_description():
-    # Artık simülasyonu kendimiz başlatacağımız için, bu fonksiyon
-    # SADECE adayın kodunu çalıştıracak.
+this_dir = Path(__file__).parent
 
-    candidate_node_cmd = ExecuteProcess(
-        cmd=['ros2', 'run', 'candidate_package', 'run_task', TASK_NAME],
-        output='screen',
-        name='candidate_node'
+@keep_alive
+def generate_test_description() -> LaunchDescription:
+    """PX4 + MAVROS launch'ını bul (install yoksa kaynak dizin)."""
+    try:
+        launch_path = Path(
+            get_package_share_directory("test_package"),
+            "launch",
+            "px4_sim.launch.py",
+        )
+    except PackageNotFoundError:
+        launch_path = this_dir.parent / "launch" / "px4_sim.launch.py"
+
+    #  **burada gerçekten LaunchDescriptionSource yarat**
+    sim_launch = PythonLaunchDescriptionSource(str(launch_path))
+
+    return LaunchDescription(
+        [
+            IncludeLaunchDescription(sim_launch),
+            ExecuteProcess(
+                cmd=["ros2", "run", "candidate_package", "run_task", "task1"],
+                output="screen",
+            ),
+            launch_testing_ros.actions.ReadyToTest(),
+        ]
     )
 
-    return LaunchDescription([
-        candidate_node_cmd,
-        # Testlerin başlamaya hazır olduğunu bildir.
-        launch_testing.actions.ReadyToTest(),
-    ])
 
-# Bu sınıf, test senaryolarını içerir.
 class ArmDisarmTest(unittest.TestCase):
+    """ARM → DISARM kenarlarını doğrular."""
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         rclpy.init()
-        self.node = Node("test_arm_disarm_monitor")
-        self.state = None
-        self.node.create_subscription(State, "/mavros/state",
-                                      lambda m: setattr(self, "state", m), 10)
+        cls.node = Node("test_arm_disarm_monitor")
+        cls.armed_edge = False
+        cls.disarmed_edge = False
+        cls.node.create_subscription(State, "/mavros/state", cls._cb, 10)
 
-    def tearDown(self):
-        self.node.destroy_node()
+    @classmethod
+    def tearDownClass(cls):
+        cls.node.destroy_node()
         rclpy.shutdown()
 
-    # helper
-    def wait_until(self, pred, timeout, desc):
+    @classmethod
+    def _cb(cls, msg: State):
+        if msg.armed and not cls.armed_edge:
+            cls.armed_edge = True
+        elif cls.armed_edge and not msg.armed:
+            cls.disarmed_edge = True
+
+    def _wait(self, pred, timeout):
         start = time.time()
         while time.time() - start < timeout:
             rclpy.spin_once(self.node, timeout_sec=0.1)
             if pred():
                 return True
-        self.node.get_logger().error(f"TIMEOUT: {desc}")
         return False
 
-    def test_arm_disarm_sequence(self):
-        start_armed = self.state.armed if self.state else False
-
-        self.assertTrue(
-            self.wait_until(
-                lambda: self.state and self.state.armed and not start_armed,
-                20.0, "Arming transition"),
-            "İHA aktif olarak ARM olmadı."
-        )
-
-        self.assertTrue(
-            self.wait_until(
-                lambda: self.state and not self.state.armed,
-                15.0, "Disarming transition"),
-            "İHA belirtilen sürede DISARM olmadı."
-        )
+    def test_arm_disarm_edge(self):
+        ok = self._wait(lambda: self.armed_edge and self.disarmed_edge, ARM_TIMEOUT)
+        self.assertTrue(ok, "ARM veya DISARM kenarı zaman aşımına uğradı")
