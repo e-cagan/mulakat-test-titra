@@ -19,7 +19,7 @@ class FlightController(Node):
         
         # ############### ADAYIN KODU BURAYA GELECEK ###############
         
-        
+        raise NotImplementedError("Kod Yazılmadı.")
         
         # ###########################################################
         
@@ -35,7 +35,7 @@ class FlightController(Node):
         
         # ############### ADAYIN KODU BURAYA GELECEK ###############
         
-        
+        raise NotImplementedError("Kod Yazılmadı.")
         
         # ###########################################################
 
