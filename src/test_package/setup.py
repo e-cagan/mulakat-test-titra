@@ -20,8 +20,8 @@ setup(
         ('share/' + package_name + '/launch',
             [str(Path(__file__).parent / 'launch' / 'px4_sim.launch.py')]),
         #  test dosyalarını da install et → CTest copy’lemezse burada bulunur
-        ('share/' + package_name + '/test', ['test/test_task1_arm_disarm.py',
-                                            'test/test_task2_takeoff_land.py']),
+        ('share/' + package_name + '/test', ['test/test_task_1_arm_disarm.py',
+                                            'test/test_task_2_takeoff_land.py']),
     ],
     install_requires=["setuptools"],
     zip_safe=True,
