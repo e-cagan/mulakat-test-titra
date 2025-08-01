@@ -1,33 +1,39 @@
-from pathlib import Path
 from setuptools import setup, find_packages
+from pathlib import Path
 
-package_name = "test_package"
+package_name = 'test_package'
 this_dir = Path(__file__).parent
 
 setup(
     name=package_name,
-    version="0.0.1",
-    packages=find_packages(exclude=["test"]),
-    # ---- launch dosyasını paket verisi olarak ekle
-    package_data={
-        "test_package": ["launch/px4_sim.launch.py"],
+    version='0.0.1',
+    packages=find_packages(exclude=['test']),
+    include_package_data=True,
+
+    package_data={  # Python modüllerinizin içine ekle
+        'test_package': ['launch/*.py'],
     },
-    include_package_data=True,          # <─  paket verilerini kopyala
-    data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch',
-            [str(Path(__file__).parent / 'launch' / 'px4_sim.launch.py')]),
-        #  test dosyalarını da install et → CTest copy’lemezse burada bulunur
-        ('share/' + package_name + '/test', ['test/test_task_1_arm_disarm.py',
-                                            'test/test_task_2_takeoff_land.py']),
+    data_files=[    # install sonunda share/ içini oluştur
+        ('share/ament_index/resource_index/packages', [f'resource/{package_name}']),
+        (f'share/{package_name}', ['package.xml']),
+        (f'share/{package_name}/launch', [str(this_dir / 'launch/px4_sim.launch.py')]),
+        (f'share/{package_name}/test', [
+            str(this_dir / 'test/test_task_1_arm_disarm.py'),
+            str(this_dir / 'test/test_task_2_takeoff_land.py'),
+        ]),
     ],
-    install_requires=["setuptools"],
+
+    install_requires=['setuptools'],
+    tests_require=[
+        'pytest',
+        'launch_testing',
+        'launch_testing_ros',
+    ],
+
     zip_safe=True,
-    maintainer="Beyza Beril",
-    maintainer_email="beyzaberilyalcinkaya@hotmail.com",
-    description="Aday kodunu doğrulayan simülasyon test paketi",
-    license="Apache-2.0",
-    tests_require=["pytest"],
+    maintainer='Beyza Beril',
+    maintainer_email='…',
+    description='Aday kodunu doğrulayan simülasyon test paketi.',
+    license='Apache-2.0',
+    entry_points={},
 )
