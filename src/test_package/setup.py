@@ -13,7 +13,7 @@ setup(
     
     # 2. Kurulacak ek dosyaları (veri dosyaları) tanımlar.
     # Bu bölüm, CMake'deki install() komutlarının yerini alır.
-    data_files=[,
+    data_files=[
         # package.xml dosyasını kurar.
         ('share/' + package_name, ['package.xml']),
         # launch dizinindeki tüm.launch.py uzantılı dosyaları kurar.
