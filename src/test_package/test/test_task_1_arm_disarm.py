@@ -23,7 +23,7 @@ from ament_index_python.packages import (
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_testing.markers import keep_alive
+from launch_testing.markers import keep_alive, launch_test
 import launch_testing_ros
 
 ARM_TIMEOUT = float(os.getenv("ARM_TIMEOUT", "20.0"))
@@ -31,6 +31,7 @@ ARM_TIMEOUT = float(os.getenv("ARM_TIMEOUT", "20.0"))
 this_dir = Path(__file__).parent
 
 @keep_alive
+@launch_test
 def generate_test_description() -> LaunchDescription:
     """PX4 + MAVROS launch'ını bul (install yoksa kaynak dizin)."""
     try:

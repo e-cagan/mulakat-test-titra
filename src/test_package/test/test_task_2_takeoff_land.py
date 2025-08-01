@@ -22,7 +22,7 @@ from geometry_msgs.msg import PoseStamped
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_testing.markers import keep_alive
+from launch_testing.markers import keep_alive, launch_test
 from pathlib import Path
 import launch_testing_ros
 
@@ -44,6 +44,7 @@ TIMEOUT_LAND = 30.0                                   # s
 
 
 @keep_alive
+@launch_test
 def generate_test_description() -> LaunchDescription:
     try:
         launch_path = Path(
