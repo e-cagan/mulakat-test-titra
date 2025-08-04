@@ -1,7 +1,8 @@
 name: UAV Assessment CI
+
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
   workflow_dispatch:
 
@@ -12,86 +13,81 @@ jobs:
   sim-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      # 1) Kaynağı al
+      - name: 📥 Checkout repo
         uses: actions/checkout@v4
-        
-      - name: Set up Docker Buildx
+
+      # 2) Buildx cache hazırlığı (opsiyonel, image’ın hızlı build’i için)
+      - name: 🛠️ Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
-      - name: Build container
+
+      # 3) Docker imajını (PX4-SITL vs önceden kurulu haliyle) build et
+      - name: 🐳 Build container
         uses: docker/build-push-action@v5
         with:
           context: .
           load: true
           tags: ${{ env.DOCKER_IMAGE }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to:   type=gha,mode=max
 
-      # Debug step - kontrol et
-      - name: Test Discovery Debug
-        run: |
-          docker run --rm -t $DOCKER_IMAGE bash -c '
-            cd /ros2_ws
-            echo "=== Test klasör yapısı ==="
-            find . -name "test_*.py" -type f
-            echo "=== Package.xml kontrol ==="
-            cat src/src/test_package/package.xml
-            echo "=== Setup.py kontrol ==="
-            cat src/src/test_package/setup.py
-          '
-
-      # ---------- TASK 1 ----------
-      - name: Run Task 1 – Arm/Disarm
+      # 4) Task 1 – Arm/Disarm testi
+      - name: 🚀 Run Task 1 – Arm/Disarm
         id: task1
-        continue-on-error: true  # NotImplementedError için devam et
+        continue-on-error: true
         run: |
-          docker run --rm -t $DOCKER_IMAGE bash -c '
-            set -e
+          docker run --rm -t $DOCKER_IMAGE bash -eo pipefail << 'EOF'
             cd /ros2_ws
-            colcon build --symlink-install
-            source install/setup.bash
-            colcon test --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --pytest-args "--launch-testing" \
-                       --pytest-args "-s" \
-                       --pytest-args "-v" \
-                       --pytest-args "-k test_arm_disarm"
-            colcon test-result --verbose
-          '
 
-      # ---------- TASK 2 ----------
-      - name: Run Task 2 – Take-off/Land
+            # Sadece test_package'ı derle
+            colcon build --symlink-install --packages-select test_package
+
+            # Ortamı yükle
+            source install/setup.bash
+
+            # Sadece ilgili test dosyasını çalıştır
+            colcon test --packages-select test_package \
+                        --event-handlers console_direct+ \
+                        --pytest-args "test/test_task_1_arm_disarm.py -s -v"
+            colcon test-result --verbose
+          EOF
+
+      # 5) Task 2 – Take-off/Land testi
+      - name: 🚀 Run Task 2 – Take-off/Land
         id: task2
-        continue-on-error: true  # NotImplementedError için devam et
+        continue-on-error: true
         run: |
-          docker run --rm -t $DOCKER_IMAGE bash -c '
-            set -e
+          docker run --rm -t $DOCKER_IMAGE bash -eo pipefail << 'EOF'
             cd /ros2_ws
-            source install/setup.bash
-            colcon test --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --pytest-args "--launch-testing" \
-                       --pytest-args "-s" \
-                       --pytest-args "-v" \
-                       --pytest-args "-k test_takeoff_land"
-            colcon test-result --verbose
-          '
 
-      # ---------- Summary ----------
-      - name: Generate summary
+            # Sadece test_package'ı derle
+            colcon build --symlink-install --packages-select test_package
+
+            # Ortamı yükle
+            source install/setup.bash
+
+            # İlgili test dosyasını çalıştır
+            colcon test --packages-select test_package \
+                        --event-handlers console_direct+ \
+                        --pytest-args "test/test_task_2_takeoff_land.py -s -v"
+            colcon test-result --verbose
+          EOF
+
+      # 6) Sonuç özeti
+      - name: 📊 Generate summary
         if: always()
         run: |
           {
-            echo '## 📝 UAV Assessment Raporu'
+            echo "## 📝 UAV Assessment Report"
             echo
-            case "${{ steps.task1.outcome }}" in
-              "success") echo '### ✅ Task 1 (Arm/Disarm) PASS' ;;
-              "failure") echo '### ❌ Task 1 (Arm/Disarm) FAIL - NotImplementedError bekleniyor' ;;
-              *) echo '### ⚠️ Task 1 (Arm/Disarm) UNKNOWN' ;;
-            esac
-            case "${{ steps.task2.outcome }}" in
-              "success") echo '### ✅ Task 2 (Take-off/Land) PASS' ;;
-              "failure") echo '### ❌ Task 2 (Take-off/Land) FAIL - NotImplementedError bekleniyor' ;;
-              *) echo '### ⚠️ Task 2 (Take-off/Land) UNKNOWN' ;;
-            esac
+            if [[ "${{ steps.task1.outcome }}" == "success" ]]; then
+              echo "### ✅ Task 1 (Arm/Disarm) PASSED"
+            else
+              echo "### ❌ Task 1 (Arm/Disarm) FAILED"
+            fi
+            if [[ "${{ steps.task2.outcome }}" == "success" ]]; then
+              echo "### ✅ Task 2 (Take-off/Land) PASSED"
+            else
+              echo "### ❌ Task 2 (Take-off/Land) FAILED"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
