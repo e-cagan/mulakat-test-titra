@@ -21,7 +21,7 @@ jobs:
       - name: 🛠️ Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 3) Docker imajını oluşturun (önceden cache’li)
+      # 3) Docker imajını oluşturun (cache’li)
       - name: 🐳 Build container
         uses: docker/build-push-action@v5
         with:
@@ -36,35 +36,39 @@ jobs:
         id: task1
         continue-on-error: true
         run: |
-          docker run --rm -t ${{ env.DOCKER_IMAGE }} \
-            bash -lc "\
-              cd /ros2_ws && \
-              # sadece test_package'i derle
-              colcon build --symlink-install --packages-select test_package && \
-              # overlay'i source et
-              source install/setup.bash && \
-              # pytest filtresi ile sadece arm/disarm testi
-              colcon test --packages-select test_package \
-                --event-handlers console_direct+ \
-                --pytest-args \"-k test_arm_disarm_edge -s -v\" && \
-              colcon test-result --verbose\
-            "
+          docker run --rm -t ${{ env.DOCKER_IMAGE }} bash -lc '
+            cd /ros2_ws
+            # Yalnızca test_package derle
+            colcon build --symlink-install --packages-select test_package
+            # overlay ortamını yükle
+            source install/setup.bash
+            # pytest -k filtresiyle sadece arm/disarm testini çalıştır
+            colcon test --packages-select test_package \
+              --event-handlers console_direct+ \
+              --pytest-args "-k" \
+              --pytest-args "test_arm_disarm_edge" \
+              --pytest-args "-s" \
+              --pytest-args "-v"
+            colcon test-result --verbose
+          '
 
       # 5) Task 2 – Take-off/Land testi
       - name: 🚀 Run Task 2 – Take-off/Land
         id: task2
         continue-on-error: true
         run: |
-          docker run --rm -t ${{ env.DOCKER_IMAGE }} \
-            bash -lc "\
-              cd /ros2_ws && \
-              colcon build --symlink-install --packages-select test_package && \
-              source install/setup.bash && \
-              colcon test --packages-select test_package \
-                --event-handlers console_direct+ \
-                --pytest-args \"-k test_takeoff_and_land_sequence -s -v\" && \
-              colcon test-result --verbose\
-            "
+          docker run --rm -t ${{ env.DOCKER_IMAGE }} bash -lc '
+            cd /ros2_ws
+            colcon build --symlink-install --packages-select test_package
+            source install/setup.bash
+            colcon test --packages-select test_package \
+              --event-handlers console_direct+ \
+              --pytest-args "-k" \
+              --pytest-args "test_takeoff_and_land_sequence" \
+              --pytest-args "-s" \
+              --pytest-args "-v"
+            colcon test-result --verbose
+          '
 
       # 6) Sonuç özeti
       - name: 📊 Generate summary
@@ -74,13 +78,13 @@ jobs:
             echo "## 📝 UAV Assessment Report"
             echo
             if [[ "${{ steps.task1.outcome }}" == "success" ]]; then
-              echo "### ✅ Task 1 (Arm/Disarm) PASSED"
+              echo "### ✅ Task 1 (Arm/Disarm) PASS"
             else
-              echo "### ❌ Task 1 (Arm/Disarm) FAILED"
+              echo "### ❌ Task 1 (Arm/Disarm) FAIL"
             fi
             if [[ "${{ steps.task2.outcome }}" == "success" ]]; then
-              echo "### ✅ Task 2 (Take-off/Land) PASSED"
+              echo "### ✅ Task 2 (Take-off/Land) PASS"
             else
-              echo "### ❌ Task 2 (Take-off/Land) FAILED"
+              echo "### ❌ Task 2 (Take-off/Land) FAIL"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
