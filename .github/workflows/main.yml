@@ -36,36 +36,37 @@ jobs:
       id: task1
       run: |
         docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -euo pipefail
+          set -eo pipefail
           source /opt/ros/humble/setup.bash
+          set -u
           cd /ros2_ws
           rm -rf build install log
           colcon build --symlink-install --packages-select test_package
-          # Sadece Task-1 test dosyasını çalıştır
-          colcon test --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --return-code-on-test-failure \
-                       --pytest-args "-k task_1"
+          colcon test  --packages-select test_package \
+                      --event-handlers console_direct+ \
+                      --return-code-on-test-failure \
+                      --pytest-args "-k task_1"
           colcon test-result --verbose
         '
 
     # ---------- TASK 2 ----------
-    - name: 🚀 Run Task 2 – Take-off / Land
-      id: task2
+    - name: 🚀 Run Task 1 – Arm / Disarm
+      id: task1
       run: |
         docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -euo pipefail
+          set -eo pipefail
           source /opt/ros/humble/setup.bash
+          set -u
           cd /ros2_ws
           rm -rf build install log
           colcon build --symlink-install --packages-select test_package
-          # Sadece Task-2 test dosyasını çalıştır
-          colcon test --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --return-code-on-test-failure \
-                       --pytest-args "-k task_2"
+          colcon test  --packages-select test_package \
+                      --event-handlers console_direct+ \
+                      --return-code-on-test-failure \
+                      --pytest-args "-k task_2"
           colcon test-result --verbose
         '
+
 
     # ---------- ÖZET ----------
     - name: 📊 Generate summary
