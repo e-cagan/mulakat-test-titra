@@ -36,15 +36,12 @@ jobs:
       id: task1                          # <--- BENZERSİZ
       run: |
         docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -eo pipefail               # -u YOK (setup.bash sıkıntı çıkarmasın)
-          source /opt/ros/humble/setup.bash
+          set -e
           cd /ros2_ws
-          rm -rf build install log
-          colcon build --symlink-install --packages-select test_package
-          colcon test  --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --return-code-on-test-failure \
-                       --pytest-args "-k task_1"
+          colcon build --symlink-install
+          colcon test --packages-select test_package \
+                      --event-handlers console_direct+ \
+                      --pytest-args "--launch-testing -s -v"
           colcon test-result --verbose
         '
 
@@ -53,15 +50,12 @@ jobs:
       id: task2                          # <--- YENİ id
       run: |
         docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -eo pipefail
-          source /opt/ros/humble/setup.bash
+          set -e
           cd /ros2_ws
-          rm -rf build install log
-          colcon build --symlink-install --packages-select test_package
-          colcon test  --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --return-code-on-test-failure \
-                       --pytest-args "-k task_2"
+          colcon build --symlink-install
+          colcon test --packages-select test_package \
+                      --event-handlers console_direct+ \
+                      --pytest-args "--launch-testing -s -v"
           colcon test-result --verbose
         '
 
