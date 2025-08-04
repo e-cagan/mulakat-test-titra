@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from mavros_interface.node import MavrosInterface # Bir önceki adımda yazdığımız arayüzü import ediyoruz
+from mavros_interface.mavros_interface.node import MavrosInterface # Bir önceki adımda yazdığımız arayüzü import ediyoruz
 import time
 
 class FlightController(Node):
