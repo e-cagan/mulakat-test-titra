@@ -41,15 +41,13 @@ jobs:
           cd /ros2_ws
           colcon build --symlink-install
           colcon test --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --pytest-args \"--launch-testing\" \
-                       --pytest-args -s \
-                       --pytest-args -v
+                      --event-handlers console_direct+ \
+                      --pytest-args \"--launch-testing -s -v\"
           colcon test-result --verbose
         "
 
     # ---------- TASK 2 ----------
-    - name: Run Task 2 – Take-off/Land
+    - name: Run Task 2 – Takeoff/Land
       id: task2
       run: |
         docker run --rm -t $DOCKER_IMAGE bash -c "
@@ -57,10 +55,8 @@ jobs:
           cd /ros2_ws
           colcon build --symlink-install
           colcon test --packages-select test_package \
-                       --event-handlers console_direct+ \
-                       --pytest-args \"--launch-testing\" \
-                       --pytest-args -s \
-                       --pytest-args -v
+                      --event-handlers console_direct+ \
+                      --pytest-args \"--launch-testing -s -v\"
           colcon test-result --verbose
         "
 
