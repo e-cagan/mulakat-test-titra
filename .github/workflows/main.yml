@@ -2,27 +2,29 @@ name: UAV Assessment CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
+  pull_request:
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE: uav-assessment-env:ci   # tek noktadan değiştir
+  # Docker imajının tek kaynağı
+  DOCKER_IMAGE: uav-assessment-env:ci
 
 jobs:
   sim-tests:
     runs-on: ubuntu-latest
 
     steps:
-    # 1) Kodu al
-    - name: Checkout repo
+    # Kod
+    - name: 📥 Checkout repo
       uses: actions/checkout@v4
 
-    # 2) Buildx + cache
-    - name: Set up Docker Buildx
+    # Docker builder + cache
+    - name: 🛠️  Set up Buildx
       uses: docker/setup-buildx-action@v3
 
-    # 3) Docker imajını build et
-    - name: Build container
+    # İmajı derle
+    - name: 🐳 Build container
       uses: docker/build-push-action@v5
       with:
         context: .
@@ -33,47 +35,49 @@ jobs:
 
     # ---------- TASK 1 ----------
     - name: 🚀 Run Task 1 – Arm / Disarm
-      id: task1                          # <--- BENZERSİZ
+      id: task1
       run: |
-        docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -e
-          cd /ros2_ws
-          colcon build --symlink-install
-          colcon test --packages-select test_package \
-                      --event-handlers console_direct+ \
-                      --pytest-args "--launch-testing -s -v"
-          colcon test-result --verbose
-        '
+        docker run --rm -t $DOCKER_IMAGE bash -eo pipefail <<'INNER'
+        cd /ros2_ws
+        colcon build --symlink-install
+        colcon test --packages-select test_package \
+                     --event-handlers console_direct+ \
+                     --pytest-args "--launch-testing" \
+                     --pytest-args -s \
+                     --pytest-args -v
+        colcon test-result --verbose
+INNER
 
     # ---------- TASK 2 ----------
     - name: 🚀 Run Task 2 – Take-off / Land
-      id: task2                          # <--- YENİ id
+      id: task2
       run: |
-        docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -e
-          cd /ros2_ws
-          colcon build --symlink-install
-          colcon test --packages-select test_package \
-                      --event-handlers console_direct+ \
-                      --pytest-args "--launch-testing -s -v"
-          colcon test-result --verbose
-        '
+        docker run --rm -t $DOCKER_IMAGE bash -eo pipefail <<'INNER'
+        cd /ros2_ws
+        colcon build --symlink-install
+        colcon test --packages-select test_package \
+                     --event-handlers console_direct+ \
+                     --pytest-args "--launch-testing" \
+                     --pytest-args -s \
+                     --pytest-args -v
+        colcon test-result --verbose
+INNER
 
-    # ---------- ÖZET ----------
+    # ---------- Özet ----------
     - name: 📊 Generate summary
       if: always()
       run: |
-        echo "## 📝 UAV Assessment Sonucu" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-
-        if [[ "${{ steps.task1.outcome }}" == "success" ]]; then
-          echo "### ✅ Task 1 (Arm/Disarm) PASS" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "### ❌ Task 1 (Arm/Disarm) FAIL" >> $GITHUB_STEP_SUMMARY
-        fi
-
-        if [[ "${{ steps.task2.outcome }}" == "success" ]]; then
-          echo "### ✅ Task 2 (Take-off/Land) PASS" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "### ❌ Task 2 (Take-off/Land) FAIL" >> $GITHUB_STEP_SUMMARY
-        fi
+        {
+          echo "## 📝 UAV Assessment Raporu"
+          echo
+          if [[ '${{ steps.task1.outcome }}' == 'success' ]]; then
+            echo "### ✅ Task 1 (Arm/Disarm) PASS"
+          else
+            echo "### ❌ Task 1 (Arm/Disarm) FAIL"
+          fi
+          if [[ '${{ steps.task2.outcome }}' == 'success' ]]; then
+            echo "### ✅ Task 2 (Take-off/Land) PASS"
+          else
+            echo "### ❌ Task 2 (Take-off/Land) FAIL"
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"
