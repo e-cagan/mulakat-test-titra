@@ -13,15 +13,15 @@ jobs:
   sim-tests:
     runs-on: ubuntu-latest
     steps:
-      # 1) Kaynağı al
+      # 1) Checkout
       - name: 📥 Checkout repo
         uses: actions/checkout@v4
 
-      # 2) Buildx cache hazırlığı (opsiyonel, image’ın hızlı build’i için)
+      # 2) Buildx hazırlık
       - name: 🛠️ Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 3) Docker imajını (PX4-SITL vs önceden kurulu haliyle) build et
+      # 3) Docker imajını build et
       - name: 🐳 Build container
         uses: docker/build-push-action@v5
         with:
@@ -36,42 +36,30 @@ jobs:
         id: task1
         continue-on-error: true
         run: |
-          docker run --rm -t $DOCKER_IMAGE bash -eo pipefail << 'EOF'
-            cd /ros2_ws
-
-            # Sadece test_package'ı derle
-            colcon build --symlink-install --packages-select test_package
-
-            # Ortamı yükle
-            source install/setup.bash
-
-            # Sadece ilgili test dosyasını çalıştır
-            colcon test --packages-select test_package \
-                        --event-handlers console_direct+ \
-                        --pytest-args "test/test_task_1_arm_disarm.py -s -v"
-            colcon test-result --verbose
-          EOF
+          docker run --rm -t ${{ env.DOCKER_IMAGE }} \
+            bash -lc " \
+              cd /ros2_ws && \
+              colcon build --symlink-install --packages-select test_package && \
+              source install/setup.bash && \
+              colcon test --packages-select test_package --event-handlers console_direct+ \
+                --pytest-args \"test/test_task_1_arm_disarm.py -s -v\" && \
+              colcon test-result --verbose \
+            "
 
       # 5) Task 2 – Take-off/Land testi
       - name: 🚀 Run Task 2 – Take-off/Land
         id: task2
         continue-on-error: true
         run: |
-          docker run --rm -t $DOCKER_IMAGE bash -eo pipefail << 'EOF'
-            cd /ros2_ws
-
-            # Sadece test_package'ı derle
-            colcon build --symlink-install --packages-select test_package
-
-            # Ortamı yükle
-            source install/setup.bash
-
-            # İlgili test dosyasını çalıştır
-            colcon test --packages-select test_package \
-                        --event-handlers console_direct+ \
-                        --pytest-args "test/test_task_2_takeoff_land.py -s -v"
-            colcon test-result --verbose
-          EOF
+          docker run --rm -t ${{ env.DOCKER_IMAGE }} \
+            bash -lc " \
+              cd /ros2_ws && \
+              colcon build --symlink-install --packages-select test_package && \
+              source install/setup.bash && \
+              colcon test --packages-select test_package --event-handlers console_direct+ \
+                --pytest-args \"test/test_task_2_takeoff_land.py -s -v\" && \
+              colcon test-result --verbose \
+            "
 
       # 6) Sonuç özeti
       - name: 📊 Generate summary
