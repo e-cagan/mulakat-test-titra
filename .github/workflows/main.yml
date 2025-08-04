@@ -2,28 +2,27 @@ name: UAV Assessment CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE: uav-assessment-env:latest   # tek yerde değiştir, her yerde geçerli
+  DOCKER_IMAGE: uav-assessment-env:ci   # tek noktadan değiştir
 
 jobs:
-  test:
-    name: Run Simulation Tests
+  sim-tests:
     runs-on: ubuntu-latest
 
     steps:
-    # 1) Repo’yu çek
-    - name: Checkout repository
+    # 1) Kodu al
+    - name: Checkout repo
       uses: actions/checkout@v4
 
-    # 2) Buildx ve cache
+    # 2) Buildx + cache
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    # 3) Docker imajını build et (cache’i GHA’de tut)
-    - name: Build Docker image
+    # 3) Docker imajını build et
+    - name: Build container
       uses: docker/build-push-action@v5
       with:
         context: .
@@ -32,55 +31,57 @@ jobs:
         cache-from: type=gha
         cache-to:   type=gha,mode=max
 
-    # ---------- TEST 1 ----------
-    - name: Run Task 1 Test – Arm/Disarm
+    # ---------- TASK 1 ----------
+    - name: 🚀 Run Task 1 – Arm / Disarm
       id: task1
       run: |
         docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -eo pipefail
+          set -euo pipefail
           source /opt/ros/humble/setup.bash
-          set -u
-          cd /root/ros2_ws
+          cd /ros2_ws
           rm -rf build install log
-          colcon build --symlink-install
+          colcon build --symlink-install --packages-select test_package
+          # Sadece Task-1 test dosyasını çalıştır
           colcon test --packages-select test_package \
-                      --event-handlers console_direct+ \
-                      --return-code-on-test-failure
+                       --event-handlers console_direct+ \
+                       --return-code-on-test-failure \
+                       --pytest-args "-k task_1"
           colcon test-result --verbose
         '
 
-    # ---------- TEST 2 ----------
-    - name: Run Task 2 Test – Takeoff/Land
+    # ---------- TASK 2 ----------
+    - name: 🚀 Run Task 2 – Take-off / Land
       id: task2
       run: |
         docker run --rm -t $DOCKER_IMAGE bash -c '
-          set -eo pipefail
+          set -euo pipefail
           source /opt/ros/humble/setup.bash
-          set -u
-          cd /root/ros2_ws
+          cd /ros2_ws
           rm -rf build install log
-          colcon build --symlink-install
+          colcon build --symlink-install --packages-select test_package
+          # Sadece Task-2 test dosyasını çalıştır
           colcon test --packages-select test_package \
-                      --event-handlers console_direct+ \
-                      --return-code-on-test-failure
+                       --event-handlers console_direct+ \
+                       --return-code-on-test-failure \
+                       --pytest-args "-k task_2"
           colcon test-result --verbose
         '
 
     # ---------- ÖZET ----------
-    - name: Generate Assessment Report
-      if: always()           # testler patlasa da çalış
+    - name: 📊 Generate summary
+      if: always()
       run: |
-        echo "## 📝 Aday Değerlendirme Raporu" >> $GITHUB_STEP_SUMMARY
-        echo "---" >> $GITHUB_STEP_SUMMARY
+        echo "## 📝 UAV Assessment Sonucu" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
 
         if [[ "${{ steps.task1.outcome }}" == "success" ]]; then
-          echo "### ✅ Görev 1: Arm/Disarm Başarılı" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Task 1 (Arm/Disarm) PASS" >> $GITHUB_STEP_SUMMARY
         else
-          echo "### ❌ Görev 1: Arm/Disarm Başarısız" >> $GITHUB_STEP_SUMMARY
+          echo "### ❌ Task 1 (Arm/Disarm) FAIL" >> $GITHUB_STEP_SUMMARY
         fi
 
         if [[ "${{ steps.task2.outcome }}" == "success" ]]; then
-          echo "### ✅ Görev 2: Otonom Kalkış/İniş Başarılı" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Task 2 (Take-off/Land) PASS" >> $GITHUB_STEP_SUMMARY
         else
-          echo "### ❌ Görev 2: Otonom Kalkış/İniş Başarısız" >> $GITHUB_STEP_SUMMARY
+          echo "### ❌ Task 2 (Take-off/Land) FAIL" >> $GITHUB_STEP_SUMMARY
         fi

@@ -1,0 +1,4 @@
+[0.000000] (-) TimerEvent: {}
+[0.000203] (-) JobUnselected: {'identifier': 'candidate_package'}
+[0.000225] (-) JobUnselected: {'identifier': 'mavros_interface'}
+[0.000431] (-) EventReactorShutdown: {}
