@@ -6,34 +6,24 @@ PX4 SITL + MAVROS ➜ candidate node ‘task1’ çağrısı
 Kenarlar ≤ 20 s içinde gözlenmeli.
 """
 
-import os
-import time
-import unittest
+import os, time, unittest
 from pathlib import Path
-
 import rclpy
 from rclpy.node import Node
 from mavros_msgs.msg import State
-
-from ament_index_python.packages import (
-    get_package_share_directory,
-    PackageNotFoundError,          #  ← ekle
-)
-
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_testing.markers import keep_alive, launch_test
 import launch_testing_ros
+from ament_index_python.packages import get_package_share_directory, PackageNotFoundError
 
 ARM_TIMEOUT = float(os.getenv("ARM_TIMEOUT", "20.0"))
-
 this_dir = Path(__file__).parent
 
 @keep_alive
 @launch_test
 def generate_test_description() -> LaunchDescription:
-    """PX4 + MAVROS launch'ını bul (install yoksa kaynak dizin)."""
     try:
         launch_path = Path(
             get_package_share_directory("test_package"),
@@ -42,20 +32,15 @@ def generate_test_description() -> LaunchDescription:
         )
     except PackageNotFoundError:
         launch_path = this_dir.parent / "launch" / "px4_sim.launch.py"
-
-    #  **burada gerçekten LaunchDescriptionSource yarat**
     sim_launch = PythonLaunchDescriptionSource(str(launch_path))
-
-    return LaunchDescription(
-        [
-            IncludeLaunchDescription(sim_launch),
-            ExecuteProcess(
-                cmd=["ros2", "run", "candidate_package", "run_task", "task1"],
-                output="screen",
-            ),
-            launch_testing_ros.actions.ReadyToTest(),
-        ]
-    )
+    return LaunchDescription([
+        IncludeLaunchDescription(sim_launch),
+        ExecuteProcess(
+            cmd=["ros2", "run", "candidate_package", "run_task", "task1"],
+            output="screen",
+        ),
+        launch_testing_ros.actions.ReadyToTest(),
+    ])
 
 
 class ArmDisarmTest(unittest.TestCase):
